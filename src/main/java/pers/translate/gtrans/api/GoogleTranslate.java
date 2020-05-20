@@ -75,11 +75,46 @@ public class GoogleTranslate {
      * @param source two or more source to translate
      * @param fromLang origin language
      * @param toLang target language
-     * @return result
+     * @return List result
      * @throws IOException source can't be encode to utf-8 / http request error
      */
-    public List<String> translate(List<String> source, String fromLang, String toLang)
-            throws IOException {
+    public List<String> translate(List<String> source, String fromLang, String toLang) throws IOException {
+        String jsonResult = this.sendRequest(source, fromLang, toLang);
+        // json serialization
+        return transJsonSerialization(jsonResult, source.size() == 1);
+    }
+
+    /**
+     * detect language
+     * @param singleSource single source to detect
+     * @return List result
+     * @throws IOException source can't be encode to utf-8 / http request error
+     */
+    public List<String> detect(final String singleSource) throws IOException {
+        return detect(new LinkedList<String>(){{add(singleSource);}});
+    }
+
+    /**
+     * detect language
+     * @param source two or more source to detect
+     * @return List result
+     * @throws IOException source can't be encode to utf-8 / http request error
+     */
+    public List<String> detect(List<String> source) throws IOException {
+        String jsonResult = this.sendRequest(source, "auto", "en");
+        // json serialization
+        return detectJsonSerialization(jsonResult, source.size() == 1);
+    }
+
+    /**
+     * build & send Request to Google Translate API server
+     * @param source two or more source to translate
+     * @param fromLang origin language
+     * @param toLang target language
+     * @return json result
+     * @throws IOException source can't be encode to utf-8 / http request error
+     */
+    private String sendRequest(List<String> source, String fromLang, String toLang) throws IOException {
         // build url with params
         String strSource = sourceToString(source);
         String apiUrl = addUrlParams(fromLang, toLang, this.calculateTk(strSource));
@@ -87,9 +122,8 @@ public class GoogleTranslate {
         // build data of post request
         ParamPairList postData = getPostData(source);
 
-        // json serialization
-        String jsonResult = this.httpClient4.doPost(apiUrl, this.header, postData);
-        return jsonSerialization(jsonResult, source.size() == 1);
+        // json result
+        return this.httpClient4.doPost(apiUrl, this.header, postData);
     }
 
     /**
@@ -128,12 +162,12 @@ public class GoogleTranslate {
     }
 
     /**
-     * serialize json result
+     * serialize translate json result
      * @param jsonResult result
      * @param isSingle single or multiple result
      * @return List<String>
      */
-    private List<String> jsonSerialization(String jsonResult, boolean isSingle){
+    private List<String> transJsonSerialization(String jsonResult, boolean isSingle){
         List<String> resultList = new LinkedList<String>();
         if (isSingle){
             resultList.add(JsonParser.parseString(jsonResult).getAsJsonArray().get(0).getAsString());
@@ -147,12 +181,31 @@ public class GoogleTranslate {
     }
 
     /**
+     * serialize detect json result
+     * @param jsonResult result
+     * @param isSingle single or multiple result
+     * @return List<String>
+     */
+    private List<String> detectJsonSerialization(String jsonResult, boolean isSingle){
+        List<String> resultList = new LinkedList<String>();
+        if (isSingle){
+            resultList.add(JsonParser.parseString(jsonResult).getAsJsonArray().get(1).getAsString());
+        } else {
+            // jsonResult like "[[[[["hello, world"]],null,"ko"],[[["hello my friends"]],null,"zh-cn"]]]"
+            JsonArray resultArray = JsonParser.parseString(jsonResult).getAsJsonArray().get(0).getAsJsonArray();
+            for (JsonElement item : resultArray)
+                resultList.add(item.getAsJsonArray().get(2).getAsString());
+        }
+        return resultList;
+    }
+
+    /**
      * calculate tk
      * @param source str to translate
      * @return translate result
      * @throws UnsupportedEncodingException source can't be encode to utf-8
      */
-    private String calculateTk(String source) throws UnsupportedEncodingException {
+    public String calculateTk(String source) throws UnsupportedEncodingException {
         byte[] sourceBytes = source.getBytes("UTF-8"); // encode utf-8
 
         BigInteger a = tkk.get(0);

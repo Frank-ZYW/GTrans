@@ -14,18 +14,25 @@ public class Demo {
         GoogleTranslate googleTranslate = new GoogleTranslate();
         List<String> result;
 
-        // single word translate
-        String singleWord = "안녕하세요 세계";
-        result = googleTranslate.translate(singleWord, "auto", "en");
+        // single translation
+        String singleWords = "안녕하세요 세계";
+        result = googleTranslate.translate(singleWords, "auto", "en");
         System.out.println(result.toString());
 
-        // multiple words translate
-        List<String> multipleWords = new LinkedList<String>();
-        multipleWords.add("使用しています");
-        multipleWords.add("Google翻译接口");
-
-        result = googleTranslate.translate(multipleWords, "auto", "en");
+        // bulk translate
+        List<String> bulkWords = new LinkedList<String>();
+        bulkWords.add("使用しています");
+        bulkWords.add("Google翻译接口");
+        result = googleTranslate.translate(bulkWords, "auto", "en");
         System.out.println(result.toString());
+
+        // single detect
+        result = googleTranslate.detect(singleWords);
+        System.out.println(result.toString());
+
+        // bulk detect
+        result = googleTranslate.detect(bulkWords);
+        System.out.println(result.toString());
+
     }
-
 }
