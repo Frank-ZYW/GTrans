@@ -9,9 +9,18 @@ GTrans uses the [Google Translate Ajax API](https://translate.google.com/) to ma
 ## Features
 
 - Fast, reliable and simple
+
 - Auto language detection & Support Hundreds of languages 
+
 - Single / Bulk translation
+
 - Connection pooling (Apache HttpClient)
+
+  
+
+## Future
+
+- Proxy/Proxy Pool support
 
 
 
@@ -143,12 +152,6 @@ The algorithm has multi-language version, like [Python](https://github.com/slori
 
 
 
-## Main API Document
-
-
-
-
-
 ## Note
 
 DISCLAIMER: this is an unofficial library using the web API of translate.googleapis.com and also is not associated with Google.
@@ -156,6 +159,8 @@ DISCLAIMER: this is an unofficial library using the web API of translate.googlea
 - The API has limitations. Read [Google Service Items](https://policies.google.com/terms?) get more information.
 - If you want to use a stable API,  use [Google's official translate API](https://cloud.google.com/translate/docs) instead.
 - If you visit too frequently, you may get HTTP 429/430 error or errors. It means your IP probably has been banned. The restriction will be lifted after 24 hours.
+
+
 
 ## License
 
