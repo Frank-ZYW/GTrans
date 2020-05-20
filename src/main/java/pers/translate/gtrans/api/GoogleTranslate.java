@@ -202,7 +202,7 @@ public class GoogleTranslate {
     /**
      * calculate tk
      * @param source str to translate
-     * @return translate result
+     * @return token
      * @throws UnsupportedEncodingException source can't be encode to utf-8
      */
     public String calculateTk(String source) throws UnsupportedEncodingException {
