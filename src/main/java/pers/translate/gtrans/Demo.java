@@ -20,7 +20,7 @@ public class Demo {
         System.out.println(result.toString());
 
         // bulk translate
-        List<String> bulkWords = new LinkedList<String>();
+        List<String> bulkWords = new LinkedList<>();
         bulkWords.add("使用しています");
         bulkWords.add("Google翻译接口");
         result = googleTranslate.translate(bulkWords, "auto", "en");

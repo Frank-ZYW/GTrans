@@ -7,9 +7,12 @@ import pers.translate.gtrans.http.HttpClient4;
 import pers.translate.gtrans.http.ParamPairList;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
-import java.util.*;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 import static java.lang.Character.getNumericValue;
 
@@ -39,11 +42,11 @@ public class GoogleTranslate {
     public GoogleTranslate(HttpClient4 httpClient4){
         this.httpClient4 = httpClient4;
 
-        this.tkk = new ArrayList<BigInteger>();
+        this.tkk = new ArrayList<>();
         tkk.add(new BigInteger("406398"));
         tkk.add(new BigInteger("2087938574"));
 
-        this.header = new HashMap<String, String>();
+        this.header = new HashMap<>();
         this.header.put("Accept", "*/*");
         this.header.put("Connection", "keep-alive");
         this.header.put("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_8) " +
@@ -168,7 +171,7 @@ public class GoogleTranslate {
      * @return List<String>
      */
     private List<String> transJsonSerialization(String jsonResult, boolean isSingle){
-        List<String> resultList = new LinkedList<String>();
+        List<String> resultList = new LinkedList<>();
         if (isSingle){
             resultList.add(JsonParser.parseString(jsonResult).getAsJsonArray().get(0).getAsString());
         } else {
@@ -187,7 +190,7 @@ public class GoogleTranslate {
      * @return List<String>
      */
     private List<String> detectJsonSerialization(String jsonResult, boolean isSingle){
-        List<String> resultList = new LinkedList<String>();
+        List<String> resultList = new LinkedList<>();
         if (isSingle){
             resultList.add(JsonParser.parseString(jsonResult).getAsJsonArray().get(1).getAsString());
         } else {
@@ -203,10 +206,9 @@ public class GoogleTranslate {
      * calculate tk
      * @param source str to translate
      * @return token
-     * @throws UnsupportedEncodingException source can't be encode to utf-8
      */
-    public String calculateTk(String source) throws UnsupportedEncodingException {
-        byte[] sourceBytes = source.getBytes("UTF-8"); // encode utf-8
+    public String calculateTk(String source) {
+        byte[] sourceBytes = source.getBytes(StandardCharsets.UTF_8); // encode utf-8
 
         BigInteger a = tkk.get(0);
         for (byte k : sourceBytes)

@@ -1,6 +1,8 @@
 package pers.translate.gtrans.http;
 
-import org.apache.http.*;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpStatus;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -23,7 +25,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -225,7 +227,7 @@ public class HttpClient4 {
      * @return HttpEntity result
      */
     private HttpEntity getUrlEncodedFormEntity(ParamPairList data) {
-        return new UrlEncodedFormEntity(data.getPairList(), Charset.forName("UTF-8"));
+        return new UrlEncodedFormEntity(data.getPairList(), StandardCharsets.UTF_8);
     }
 
     /**
@@ -246,9 +248,7 @@ public class HttpClient4 {
                 uriBuilder.addParameter(pair.getName(), value);
             }
             finalUrl = uriBuilder.build().toString();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch ( URISyntaxException e ) {
+        } catch (UnsupportedEncodingException | URISyntaxException e) {
             e.printStackTrace();
         }
         return finalUrl;

@@ -19,14 +19,14 @@ public class ParamPairList {
      * Default constructor
      */
     public ParamPairList(){
-        pairList = new LinkedList<NameValuePair>();
+        pairList = new LinkedList<>();
     }
 
     /**
      * Constructor with Map
      */
     public ParamPairList(Map<String, Object> params){
-        pairList = new LinkedList<NameValuePair>();
+        pairList = new LinkedList<>();
         for (Map.Entry<String, Object> entry : params.entrySet())
             pairList.add(new BasicNameValuePair(entry.getKey(), entry.getValue().toString()));
     }
@@ -58,7 +58,7 @@ public class ParamPairList {
      * @return NameValuePair
      */
     public List<NameValuePair> findAllParamPairByKey(String key){
-        List<NameValuePair> results = new LinkedList<NameValuePair>();
+        List<NameValuePair> results = new LinkedList<>();
         for(NameValuePair item: pairList)
             if (item.getName().equals(key))
                 results.add(item);
